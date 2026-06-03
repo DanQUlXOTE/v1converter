@@ -20,10 +20,14 @@ half-converted.
 ## Build
 
 ```bash
-go build -o v1converter .
+make build          # build ./v1converter for the current platform
+make check          # gofmt check, go vet, go test
+make release        # cross-compile binaries into dist/ (linux/darwin/windows, amd64/arm64)
 ```
 
-Requires Go 1.26+. The only dependency is `gopkg.in/yaml.v3`.
+Or without make: `go build -o v1converter .`. Requires Go 1.26+; the only
+dependency is `gopkg.in/yaml.v3`. Run `v1converter --version` to print the build
+version. `make help` lists all targets.
 
 ## Usage
 

@@ -34,16 +34,25 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// version is set at build time via -ldflags "-X main.version=...".
+var version = "dev"
+
 func main() {
 	outDir := flag.String("out-dir", "", "directory to write converted files into (default: alongside input as <name>.v2.yaml)")
 	inPlace := flag.Bool("in-place", false, "overwrite each input file with its converted output")
 	dryRun := flag.Bool("dry-run", false, "report what would change without writing any files")
 	verbose := flag.Bool("v", false, "verbose: list every change per configuration")
+	showVersion := flag.Bool("version", false, "print version and exit")
 	flag.Usage = func() {
 		fmt.Fprintln(os.Stderr, "usage: v1converter [flags] <file.yaml>...")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
+	if *showVersion {
+		fmt.Println("v1converter", version)
+		return
+	}
 
 	files := flag.Args()
 	if len(files) == 0 {
