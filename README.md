@@ -117,3 +117,7 @@ the converted file and adjust before applying.
 ```bash
 go test ./...
 ```
+
+## License
+
+Apache License 2.0. See [LICENSE](LICENSE).

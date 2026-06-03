@@ -1,4 +1,18 @@
-// Command bp-v1-to-v2 converts Bindplane Configuration YAML from apiVersion v1
+// Copyright observIQ, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+// Command v1converter converts Bindplane Configuration YAML from apiVersion v1
 // to v2, moving processors that are no longer available as processors (because
 // they became extensions) into the spec.extensions list.
 //
@@ -26,7 +40,7 @@ func main() {
 	dryRun := flag.Bool("dry-run", false, "report what would change without writing any files")
 	verbose := flag.Bool("v", false, "verbose: list every change per configuration")
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "usage: bp-v1-to-v2 [flags] <file.yaml>...")
+		fmt.Fprintln(os.Stderr, "usage: v1converter [flags] <file.yaml>...")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
