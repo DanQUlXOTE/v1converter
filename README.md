@@ -1,5 +1,7 @@
 # v1converter
 
+[![CI](https://github.com/DanQUlXOTE/v1converter/actions/workflows/ci.yml/badge.svg)](https://github.com/DanQUlXOTE/v1converter/actions/workflows/ci.yml)
+
 Convert [Bindplane](https://bindplane.com) Configuration YAML from `apiVersion`
 **v1** to **v2**, handling the processors that no longer exist as processors in
 v2:

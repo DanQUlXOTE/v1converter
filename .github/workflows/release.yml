@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history so `git describe` resolves the tag for the embedded version.
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Check, vet, test
+        run: make check
+
+      - name: Cross-compile release binaries
+        run: make release
+
+      - name: Attach binaries to the release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
