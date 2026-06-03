@@ -1,0 +1,88 @@
+# Example v1 configuration with the two metric-generating processors inline
+# (count_telemetry and extract_metric_v2). Run it through v1converter to produce
+# the equivalent v2 config with count / signaltometrics connectors.
+#
+# Self-contained: an inline otlp source and a dev_null Destination resource, so
+# it applies with no library dependencies.
+apiVersion: bindplane.observiq.com/v1
+kind: Destination
+metadata:
+    name: example-devnull
+spec:
+    type: dev_null
+    parameters: []
+---
+apiVersion: bindplane.observiq.com/v1
+kind: Configuration
+metadata:
+    name: example
+    labels:
+        platform: linux
+spec:
+    sources:
+        - id: 01SRCOTLP
+          type: otlp
+          parameters:
+            - name: listen_address
+              value: 0.0.0.0
+            - name: grpc_port
+              value: 4317
+            - name: http_port
+              value: 4318
+          processors:
+            - id: 01COUNT
+              displayName: Logs Sent Metric
+              type: count_telemetry
+              parameters:
+                - name: telemetry_types
+                  value:
+                    - Logs
+                - name: log_match
+                  value: ""
+                - name: log_metric_name
+                  value: custom.logs.sent
+                - name: log_metric_units
+                  value: '{logs}'
+                - name: log_enable_attributes
+                  value: false
+                - name: datapoint_match
+                  value: ""
+                - name: datapoint_metric_name
+                  value: datapoint.count
+                - name: datapoint_metric_units
+                  value: '{datapoints}'
+                - name: datapoint_enable_attributes
+                  value: false
+                - name: span_match
+                  value: ""
+                - name: span_metric_name
+                  value: span.count
+                - name: span_metric_units
+                  value: '{spans}'
+                - name: span_enable_attributes
+                  value: false
+                - name: interval
+                  value: 60
+            - id: 01EXTRACT
+              displayName: Dropped Log Metrics
+              type: extract_metric_v2
+              parameters:
+                - name: metrics
+                  value:
+                    - condition:
+                        ottl: ""
+                        ui:
+                            operator: ""
+                            statements: []
+                      match: Body
+                      metricAttributes: {}
+                      metricField: dropped_items
+                      metricName: custom.logs.dropped
+                      metricType: gauge_int
+                      metricUnit: '{logs}'
+    destinations:
+        - id: d-devnull
+          name: example-devnull
+    selector:
+        matchLabels:
+            configuration: example

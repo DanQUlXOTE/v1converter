@@ -1,0 +1,4 @@
+# build output
+/v1converter
+# converted configs
+*.v2.yaml
